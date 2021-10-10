@@ -1,12 +1,15 @@
 name: .NET
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ div ]
+  pull_request:
+    branches: [ div ]
 
 jobs:
   build:
-    name: Initialize build on .Net
-    
-    runs-on: windows-latest
+
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
