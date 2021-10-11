@@ -105,7 +105,7 @@
                                 <fa:ImageAwesome Height="12" Icon="Solid_Search" Margin="3,0"/>
                                 <TextBox/>
                             </DockPanel>
-                            <DataGrid ItemsSource="{Binding SelectedGroup.Students}" AutoGenerateColumns="False" CanUserAddRows="False" GridLinesVisibility="Vertical" VerticalGridLinesBrush="DarkGray" AlternatingRowBackground="LightGray">
+                            <DataGrid ItemsSource="{Binding SelectedGroup.Students}" AutoGenerateColumns="False" CanUserAddRows="False" GridLinesVisibility="Vertical" VerticalGridLinesBrush="DarkGray" AlternatingRowBackground="LightGray" EnableRowVirtualization="True">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" Width="Auto" IsReadOnly="True" />
                                     <DataGridTextColumn Header="Имя" Binding="{Binding Name}" IsReadOnly="True"/>
@@ -231,7 +231,19 @@
             <TabItem Header="Тестирование виртуализации">
                 <Grid>
                     <TextBlock Text="{Binding Source={x:Static local:App.IsDesignMode}}"/>
-                    <ListBox HorizontalAlignment="left" Width="200" Margin="30" ItemsSource="{Binding TestStudents}">
+                    <ListBox HorizontalAlignment="left"
+                             Width="200"
+                             Margin="30"
+                             ItemsSource="{Binding TestStudents}"
+                             VirtualizingPanel.IsVirtualizing="True"
+                             VirtualizingPanel.VirtualizationMode="Recycling"
+                             VirtualizingPanel.IsContainerVirtualizable="true"
+                             >
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
