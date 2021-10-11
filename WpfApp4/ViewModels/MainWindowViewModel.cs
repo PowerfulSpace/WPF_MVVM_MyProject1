@@ -19,6 +19,16 @@ namespace WpfApp4.ViewModels
 
         public object[] CompositeCollection { get; }
 
+        #region Тестирование виртуализации
+        public IEnumerable<Student> TestStudents => Enumerable.Range(1, App.IsDesignMode ? 10 : 10_000)
+           .Select(i => new Student
+           {
+               Name = $"Имя{i}",
+               Surname = $"Фамилия{i}"
+           });
+        #endregion
+
+
 
 
         #region Команды
@@ -112,7 +122,7 @@ namespace WpfApp4.ViewModels
             Groups = new ObservableCollection<Group>(groups);
             #endregion
 
-
+            #region Работа с разными типами данных
             var data_list = new List<object>();
 
             data_list.Add("Hello World");
@@ -122,6 +132,8 @@ namespace WpfApp4.ViewModels
             data_list.Add(group.Students[0]);
 
             CompositeCollection = data_list.ToArray();
+            #endregion
+
         }
 
 
