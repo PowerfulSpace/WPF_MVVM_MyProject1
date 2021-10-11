@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfApp4.Models.Decanat;
 
 namespace WpfApp4
 {
@@ -25,5 +26,25 @@ namespace WpfApp4
             InitializeComponent();
         }
 
+        private void GroupsCollection_OnFilter(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is Group group)) return;
+            if (group.Name is null) return;
+
+            var filter_text = GroupNameFilterText.Text;
+            if (filter_text.Length == 0) return;
+
+            if (group.Name.Contains(filter_text)) return;
+            if (group.Description != null && group.Description.Contains(filter_text)) return;
+
+            e.Accepted = false;
+        }
+
+        private void OnGroupsFilterTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var text_box = (TextBox)sender;
+            var collection = (CollectionViewSource)text_box.FindResource("GroupsCollection");
+            collection.View.Refresh();
+        }
     }
 }
