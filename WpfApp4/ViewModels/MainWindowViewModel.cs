@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using WpfApp4.Infrastructure.Commands;
 using WpfApp4.Models.Decanat;
@@ -134,11 +136,92 @@ namespace WpfApp4.ViewModels
             CompositeCollection = data_list.ToArray();
             #endregion
 
+            #region Фильтр групп со студентами
+
+            _SelectedGroupStudents.Filter += OnStundetFiltered;
+
+            #region работаем с фильтром
+
+            #region Сортируем по имени, по убыванию
+            //_SelectedGroupStudents.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Descending));
+            #endregion
+
+            #region Групируем студентов по имени
+            //_SelectedGroupStudents.GroupDescriptions.Add(new PropertyGroupDescription("Name"));
+            #endregion
+
+            #endregion
+            #endregion
+
         }
+
+
 
 
         #region Свойства
 
+
+
+        #region StudentFilterText
+
+        private string _StudentFilterText;
+
+        public string StudentFilterText
+        {
+            get => _StudentFilterText;
+            set
+            {
+                if (!Set(ref _StudentFilterText, value)) return;
+                _SelectedGroupStudents.View.Refresh();
+
+            }
+        }
+
+        #endregion
+
+
+        #region SelectedGroupStudents
+
+        private readonly CollectionViewSource _SelectedGroupStudents = new CollectionViewSource();
+
+
+        private void OnStundetFiltered(object sender, FilterEventArgs e)
+        {
+            if(!(e.Item is Student student))
+            {
+                e.Accepted = false;
+                return;
+            }
+
+            var filter_text = _StudentFilterText;
+            if (string.IsNullOrWhiteSpace(filter_text)) return;
+
+
+            if (student.Name is null || student.Surname is null || student.Patronymic is null)
+            {
+                e.Accepted = false;
+                return;
+            }
+
+            if (student.Name.IndexOf(filter_text, StringComparison.OrdinalIgnoreCase) != -1) return;
+            if (student.Surname.IndexOf(filter_text, StringComparison.OrdinalIgnoreCase) != -1) return;
+            if (student.Patronymic.IndexOf(filter_text, StringComparison.OrdinalIgnoreCase) != -1) return;
+
+            #region Проверка через Contains. Но без чувствительности к регистру. т.к на этой версии не работает
+            //if (student.Name.Contains(filter_text)) return;
+            //if (student.Surname.Contains(filter_text)) return;
+            //if (student.Patronymic.Contains(filter_text)) return;
+            #endregion
+
+
+            e.Accepted = false;
+
+        }
+
+        public ICollectionView SelectedGroupStudents => _SelectedGroupStudents?.View;
+
+
+        #endregion
 
 
         #region Выбранная группа SelectedGroup
@@ -148,11 +231,29 @@ namespace WpfApp4.ViewModels
         public Group SelectedGroup
         {
             get => _SelectedGroup;
-            set => Set(ref _SelectedGroup, value);
+            set
+            {
+                if (!Set(ref _SelectedGroup, value)) return;
+
+                _SelectedGroupStudents.Source = value?.Students;
+                OnPropertyChanged(nameof(SelectedGroupStudents));
+            }
         }
 
         #endregion
 
+
+        #region SelectedPageIndex   int - номер выбранной вкладки
+
+        private int _SelectedPageIndex = 1;
+
+        public int SelectedPageIndex
+        {
+            get => _SelectedPageIndex;
+            set => Set(ref _SelectedPageIndex, value);
+        }
+
+        #endregion
 
         #region SelectedCompositevalue
 
@@ -202,6 +303,12 @@ namespace WpfApp4.ViewModels
         #endregion
 
         #endregion
+
+
+
+
+
+
 
     }
 }

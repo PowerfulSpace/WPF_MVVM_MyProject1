@@ -34,8 +34,11 @@ namespace WpfApp4
             var filter_text = GroupNameFilterText.Text;
             if (filter_text.Length == 0) return;
 
-            if (group.Name.Contains(filter_text)) return;
-            if (group.Description != null && group.Description.Contains(filter_text)) return;
+            //if (group.Name.Contains(filter_text)) return;
+            //if (group.Description != null && group.Description.Contains(filter_text)) return;
+
+            if (group.Name.IndexOf(filter_text, StringComparison.OrdinalIgnoreCase) != -1) return;
+            if (group.Description != null && group.Description.IndexOf(filter_text, StringComparison.OrdinalIgnoreCase) != -1) return;
 
             e.Accepted = false;
         }

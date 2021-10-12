@@ -8,7 +8,8 @@
         xmlns:cmd="clr-namespace:WpfApp4.Infrastructure.Commands"
         xmlns:decanat="clr-namespace:WpfApp4.Models.Decanat"
         xmlns:vm="clr-namespace:WpfApp4.ViewModels"
-        xmlns:local="clr-namespace:WpfApp4"    
+        xmlns:local="clr-namespace:WpfApp4"
+        xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
         Title="{Binding Title}"
         Height="450" Width="800">
@@ -53,7 +54,11 @@
                     <GroupBox Grid.Column="0" Header="группы">
                         <DockPanel>
                             <DockPanel.Resources>
-                                <CollectionViewSource x:Key="GroupsCollection" x:Name="GroupsCollection" Source="{Binding Groups}" Filter="GroupsCollection_OnFilter"/>
+                                <CollectionViewSource x:Key="GroupsCollection" x:Name="GroupsCollection" Source="{Binding Groups}" Filter="GroupsCollection_OnFilter">
+                                    <CollectionViewSource.SortDescriptions>
+                                        <cm:SortDescription PropertyName="Name" Direction="Descending" />
+                                    </CollectionViewSource.SortDescriptions>
+                                </CollectionViewSource>
                             </DockPanel.Resources>
                             <DockPanel DockPanel.Dock="Top" Margin="0,3">
                                 <fa:ImageAwesome Height="12" Icon="Solid_Search" Margin="3,0"/>
@@ -103,9 +108,9 @@
                         <DockPanel>
                             <DockPanel DockPanel.Dock="Top" Margin="0,3">
                                 <fa:ImageAwesome Height="12" Icon="Solid_Search" Margin="3,0"/>
-                                <TextBox/>
+                                <TextBox Text="{Binding StudentFilterText, UpdateSourceTrigger=PropertyChanged}"/>
                             </DockPanel>
-                            <DataGrid ItemsSource="{Binding SelectedGroup.Students}" AutoGenerateColumns="False" CanUserAddRows="False" GridLinesVisibility="Vertical" VerticalGridLinesBrush="DarkGray" AlternatingRowBackground="LightGray" EnableRowVirtualization="True">
+                            <DataGrid ItemsSource="{Binding SelectedGroupStudents}" AutoGenerateColumns="False" CanUserAddRows="False" GridLinesVisibility="Vertical" VerticalGridLinesBrush="DarkGray" AlternatingRowBackground="LightGray" EnableRowVirtualization="True">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" Width="Auto" IsReadOnly="True" />
                                     <DataGridTextColumn Header="Имя" Binding="{Binding Name}" IsReadOnly="True"/>
@@ -130,9 +135,6 @@
                         </DockPanel>
                     </GroupBox>
                 </Grid>
-
-                
-
             </TabItem>
 
             <TabItem Visibility="Collapsed">
@@ -227,8 +229,7 @@
                     </Button.RenderTransform>
                 </Button>
             </TabItem>
-
-            <TabItem Header="Тестирование виртуализации">
+            <TabItem Header="Тестирование виртуализации" Visibility="Collapsed">
                 <Grid>
                     <TextBlock Text="{Binding Source={x:Static local:App.IsDesignMode}}"/>
                     <ListBox HorizontalAlignment="left"
@@ -264,6 +265,10 @@
                 </Grid>
             </TabItem>
 
+            <TabItem Header="Empty">
+                
+            </TabItem>
+            
         </TabControl>
     </DockPanel>
 </Window>
