@@ -30,9 +30,6 @@ namespace WpfApp4.ViewModels
            });
         #endregion
 
-
-
-
         #region Команды
 
         #region CloseApplicationCommand
@@ -90,9 +87,13 @@ namespace WpfApp4.ViewModels
 
         #endregion
 
-        
-
         #endregion
+
+
+       
+
+
+
 
         public MainWindowViewModel()
         {
@@ -159,6 +160,26 @@ namespace WpfApp4.ViewModels
 
 
         #region Свойства
+
+
+
+        #region выбранная директория Модель представлениея DirectoryViewModel
+
+        public DirectoryViewModel DiskRootDir { get; } = new DirectoryViewModel("c:\\");
+
+
+
+        private DirectoryViewModel _SelectedDirectory;
+
+        public DirectoryViewModel SelectedDirectory
+        {
+            get => _SelectedDirectory;
+            set => Set(ref _SelectedDirectory, value);
+        }
+
+
+        #endregion
+
 
 
 
