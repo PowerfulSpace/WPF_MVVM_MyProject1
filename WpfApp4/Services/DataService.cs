@@ -18,7 +18,7 @@ namespace WpfApp4.Services
         {
             var client = new HttpClient();
             var response = await client.GetAsync(_DataSourceAddress, HttpCompletionOption.ResponseHeadersRead);
-            return await response.Content.ReadAsStreamAsync();
+            return await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
         }
 
         private static IEnumerable<string> GetDataLines()  // разбивает поток на последовательность строк
@@ -33,7 +33,7 @@ namespace WpfApp4.Services
                         var line = data_reader.ReadLine();
 
                         if (string.IsNullOrWhiteSpace(line)) continue;
-                        yield return line.Replace("Korea,", "Korea -");
+                        yield return line.Replace("Korea,", "Korea -").Replace("Bonaire,", "Bonaire -");
                     }
                 }
             }
