@@ -6,7 +6,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WpfApp4.Models;
+
 
 namespace WpfApp4.Services
 {
@@ -49,7 +51,7 @@ namespace WpfApp4.Services
 
 
 
-        private static IEnumerable<PlaceInfo> GetCountriesData()  //Этот метод позволяет извлечь информацию о каждой стране
+        private static IEnumerable<(string Province, string Country, (double Lat, double Lon) Place, int[] Counts)> GetCountriesData()  //Этот метод позволяет извлечь информацию о каждой стране
         {
             var lines = GetDataLines()
                 .Skip(1)
@@ -64,7 +66,7 @@ namespace WpfApp4.Services
                 var counts = row.Skip(4).Select(int.Parse).ToArray();
 
 
-                yield return new PlaceInfo();
+                yield return (province, country_name, (latitude, longitude), counts);
 
             }
 
@@ -75,15 +77,24 @@ namespace WpfApp4.Services
         {
 
             var dates = GetDates();
+            var data = GetCountriesData().GroupBy(d => d.Country);
 
-            
-
-
-            return Enumerable.Empty<CountryInfo>();
+            foreach (var country_info in data)
+            {
+                var country = new CountryInfo
+                {
+                    Name = country_info.Key,
+                    ProvinceCounts = country_info.Select(c => new PlaceInfo
+                    {
+                        Name = c.Province,
+                        Location = new Point(c.Place.Lat, c.Place.Lon),
+                        Counts = dates.Zip(c.Counts, (date, count) => new ConfirmedCount { Date = date, Count = count})
+                    })
+                };
+                yield return country;
+            }
         }
-
-
-       
 
     }
 }
+//dates.Zip(c.Counts, (date, count) => new ConfirmedCount { Date = date, Count = count })
