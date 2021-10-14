@@ -75,7 +75,7 @@ namespace WpfApp4.Services
 
         public IEnumerable<CountryInfo> GetData()
         {
-
+            
             var dates = GetDates();
             var data = GetCountriesData().GroupBy(d => d.Country);
 

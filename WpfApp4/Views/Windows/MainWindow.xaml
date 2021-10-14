@@ -9,6 +9,7 @@
         xmlns:decanat="clr-namespace:WpfApp4.Models.Decanat"
         xmlns:vm="clr-namespace:WpfApp4.ViewModels"
         xmlns:local="clr-namespace:WpfApp4"
+        xmlns:view="clr-namespace:WpfApp4.Views"
         xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
         Title="{Binding Title}"
@@ -264,8 +265,7 @@
                     </ListBox>
                 </Grid>
             </TabItem>
-
-            <TabItem Header="Файловая система">
+            <TabItem Header="Файловая система" Visibility="Collapsed">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="250"/>
@@ -295,6 +295,11 @@
                     </GroupBox>-->
                 </Grid>
             </TabItem>
+
+            <TabItem Header="Статистика">
+                <view:CountriesStatisticView/>
+            </TabItem>
+            
             
         </TabControl>
     </DockPanel>
