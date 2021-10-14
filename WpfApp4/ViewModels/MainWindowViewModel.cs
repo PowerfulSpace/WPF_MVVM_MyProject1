@@ -17,6 +17,13 @@ namespace WpfApp4.ViewModels
     class MainWindowViewModel : ViewModel
     {
 
+        #region Вторичные ViewModel
+
+        private readonly CountryStaticViewModel _CountryStaticViewModel;
+
+        #endregion
+
+
         public ObservableCollection<Group> Groups {get;}
 
         public object[] CompositeCollection { get; }
@@ -97,6 +104,9 @@ namespace WpfApp4.ViewModels
 
         public MainWindowViewModel()
         {
+
+            _CountryStaticViewModel = new CountryStaticViewModel(this);
+
             CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCreateGroupCommandExecute);
             CreateGroupCommand = new LambdaCommand(OnCreateGroupCommandExecuted, CanCreateGroupCommandExecute);
             DeleteGroupCommand = new LambdaCommand(OnDeleteGroupCommandExecuted, CanDeleteGroupCommandExecute);

@@ -125,6 +125,7 @@
     <Compile Include="Models\Decanat\Student.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />
+    <Compile Include="ViewModels\CountryStaticViewModel.cs" />
     <Compile Include="ViewModels\DirectoryViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\CountriesStatisticView.xaml.cs">
