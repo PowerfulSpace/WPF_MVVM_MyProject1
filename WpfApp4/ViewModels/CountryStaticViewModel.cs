@@ -98,7 +98,7 @@ namespace WpfApp4.ViewModels
         public IEnumerable<CountryInfo> SelectedCountry
         {
             get => _SelectedCountry;
-            private set => Set(ref _SelectedCountry, value);
+            set => Set(ref _SelectedCountry, value);
         }
 
         #endregion
