@@ -10,6 +10,7 @@ using WpfApp4.Infrastructure.Converters.BaseConverter;
 
 namespace WpfApp4.Infrastructure.Converters
 {
+    [ValueConversion(typeof(Point), typeof(string))] // существует для подсказки vs что является входящим значением и выходящим
     internal class LocationPointToStr : Converter
     {
 
