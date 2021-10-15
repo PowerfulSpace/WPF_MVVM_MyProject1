@@ -19,7 +19,7 @@ namespace WpfApp4.ViewModels
 
         #region Вторичные ViewModel
 
-        private readonly CountryStaticViewModel _CountryStaticViewModel;
+        public CountryStaticViewModel CountrisStatic { get; }
 
         #endregion
 
@@ -105,7 +105,7 @@ namespace WpfApp4.ViewModels
         public MainWindowViewModel()
         {
 
-            _CountryStaticViewModel = new CountryStaticViewModel(this);
+            CountrisStatic = new CountryStaticViewModel(this);
 
             CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCreateGroupCommandExecute);
             CreateGroupCommand = new LambdaCommand(OnCreateGroupCommandExecuted, CanCreateGroupCommandExecute);

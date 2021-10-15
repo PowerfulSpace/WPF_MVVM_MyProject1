@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using WpfApp4.Infrastructure.Commands;
 using WpfApp4.Models;
@@ -13,7 +14,7 @@ namespace WpfApp4.ViewModels
 {
     internal class CountryStaticViewModel : ViewModel
     {
-        private DataService _DataService;
+        private readonly DataService _DataService;
         private MainWindowViewModel MainModel { get; }
 
 
@@ -28,18 +29,41 @@ namespace WpfApp4.ViewModels
             Countries = _DataService.GetData();
         }
 
+        private bool CanRefreshDataCommandExecute(object p) => true;
+
         #endregion
 
 
 
+        public CountryStaticViewModel() : this(null)
+        {
+            if (!App.IsDesignMode)
+            {
+                throw new InvalidOperationException("Вызов конструктора, не преднозначенного для использования в обычном режиме");  
+            }
 
+            _Countries = Enumerable.Range(1, 10).Select(i => new CountryInfo
+            {
+                Name = $"Country {i}",
+                ProvinceCounts = Enumerable.Range(1, 10).Select(j => new PlaceInfo
+                {
+                    Name = $"Province {i}",
+                    Location = new Point(i, j),
+                    Counts = Enumerable.Range(1, 10).Select(k => new ConfirmedCount
+                    {
+                        Date = DateTime.Now.Subtract(TimeSpan.FromDays(100 - k)),
+                        Count = k
+                    }).ToArray()
+                }).ToArray()
+            }).ToArray();
+        }
 
         public CountryStaticViewModel(MainWindowViewModel MainModel)
         {
             this.MainModel = MainModel;
             _DataService = new DataService();
 
-            RefreshDataCommand = new LambdaCommand(OnRefreshDataCommandExecuted);
+            RefreshDataCommand = new LambdaCommand(OnRefreshDataCommandExecuted, CanRefreshDataCommandExecute);
         }
 
 
@@ -63,6 +87,25 @@ namespace WpfApp4.ViewModels
         }
 
         #endregion
+
+
+
+
+        #region SelectedCountry Выбранная страна
+
+        private IEnumerable<CountryInfo> _SelectedCountry;
+
+        public IEnumerable<CountryInfo> SelectedCountry
+        {
+            get => _SelectedCountry;
+            private set => Set(ref _SelectedCountry, value);
+        }
+
+        #endregion
+
+
+
+
 
 
         #endregion
