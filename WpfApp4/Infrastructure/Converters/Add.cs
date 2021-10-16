@@ -1,25 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows.Markup;
 using WpfApp4.Infrastructure.Converters.BaseConverter;
 
 namespace WpfApp4.Infrastructure.Converters
 {
-
-    [MarkupExtensionReturnType(typeof(Ratio))]
-    internal class Ratio : Converter
+    [MarkupExtensionReturnType(typeof(Add))]
+    internal class Add : Converter
     {
-        [ConstructorArgument("K")]
-        public double K { get; set; } = 1;
+        [ConstructorArgument("B")]
+        public double B { get; set; } = 1;
 
 
-        public Ratio() { }
-        public Ratio(double K) => this.K = K;
+        public Add() { }
+        public Add(double K) => this.B = B;
 
 
 
@@ -29,7 +23,7 @@ namespace WpfApp4.Infrastructure.Converters
 
             var x = System.Convert.ToDouble(value, culture);
 
-            return x * K;
+            return x + B;
         }
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -38,11 +32,13 @@ namespace WpfApp4.Infrastructure.Converters
 
             var x = System.Convert.ToDouble(value, culture);
 
-            return x / K;
+            return x - B;
         }
 
 
     }
+
+
 
 
 }

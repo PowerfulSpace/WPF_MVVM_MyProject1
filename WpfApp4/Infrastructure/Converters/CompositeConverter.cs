@@ -5,15 +5,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Markup;
 using WpfApp4.Infrastructure.Converters.BaseConverter;
 
 namespace WpfApp4.Infrastructure.Converters
 {
+    [MarkupExtensionReturnType(typeof(CompositeConverter))]
     class CompositeConverter : Converter
     {
 
+        [ConstructorArgument("First")]
         public IValueConverter First { get; set; }
+
+        [ConstructorArgument("Second")]
         public IValueConverter Second { get; set; }
+
+
+
+        public CompositeConverter() { }
+        public CompositeConverter(IValueConverter First) => this.First = First;
+        public CompositeConverter(IValueConverter First, IValueConverter Second) : this(First) => this.Second = Second;
+
+
 
 
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)

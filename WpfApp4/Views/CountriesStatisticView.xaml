@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:l="clr-namespace:WpfApp4" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+             xmlns:common="clr-namespace:WpfApp4.Infrastructure.Common" 
              xmlns:vm="clr-namespace:WpfApp4.ViewModels" 
              xmlns:m="clr-namespace:WpfApp4.Models" 
              xmlns:fa="http://schemas.fontawesome.com/icons/"
@@ -71,12 +72,27 @@
                 </Grid.RowDefinitions>
                 <GridSplitter VerticalAlignment="Bottom" HorizontalAlignment="Stretch"/>
                 <StackPanel Grid.Row="0">
-                    <Slider Grid.Row="0" Name="Value1" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}" />
-                    <Slider Grid.Row="0" Name="Value2" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}" />
-                    <Slider Grid.Row="0" Name="Value3" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}" />
+                    <Slider Grid.Row="0" Name="Value1" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}, Converter={c:Linear 5}}" />
+                    <Slider Grid.Row="0" Name="Value2" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}, Converter={c:CompositeConverter First={c:Add 5}, Second={c:Ratio 7}}}" />
+                    <Slider Grid.Row="0" Name="Value3" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}, Converter={c:CompositeConverter {c:Linear 5},{c:CompositeConverter {c:Ratio 6}, {c:Add 7}}}}" />
                     <Slider Grid.Row="0" Name="Value4" Maximum="100" ToolTip="{Binding Value, RelativeSource={RelativeSource Self}}" />
                 </StackPanel>
-                <ListBox Grid.Row="1">
+                <Border Grid.Row="1">
+                    <Border.DataContext>
+                        <common:StringToIntArray Str="1;2;3;4"/>
+                    </Border.DataContext>
+                    <ListBox Grid.Row="1" ItemsSource="{Binding}">
+                        <!--<ListBox.ItemsSource>-->
+                        <!--<MultiBinding Converter="{StaticResource ToArrayConverter}">
+                            <Binding ElementName="Value1" Path="Value" />
+                            <Binding ElementName="Value2" Path="Value" />
+                            <Binding ElementName="Value3" Path="Value" />
+                            <Binding ElementName="Value4" Path="Value" />
+                        </MultiBinding>
+                    </ListBox.ItemsSource>-->
+                    </ListBox>
+                </Border>
+                <!--<ListBox Grid.Row="1">
                     <ListBox.ItemsSource>
                         <MultiBinding Converter="{StaticResource ToArrayConverter}">
                             <Binding ElementName="Value1" Path="Value" />
@@ -85,7 +101,7 @@
                             <Binding ElementName="Value4" Path="Value" />
                         </MultiBinding>
                     </ListBox.ItemsSource>
-                </ListBox>
+                </ListBox>-->
             </Grid>
         </GroupBox>
 
