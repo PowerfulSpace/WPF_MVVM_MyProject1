@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Markup;
 using WpfApp4.Infrastructure.Commands;
 using WpfApp4.Models;
 using WpfApp4.Services;
@@ -12,6 +13,7 @@ using WpfApp4.ViewModels.Base;
 
 namespace WpfApp4.ViewModels
 {
+    [MarkupExtensionReturnType(typeof(CountryStaticViewModel))]
     internal class CountryStaticViewModel : ViewModel
     {
         private readonly DataService _DataService;
