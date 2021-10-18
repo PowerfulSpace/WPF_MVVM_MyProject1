@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using WpfApp4.Models;
@@ -23,10 +24,10 @@ namespace WpfApp4.Services
             return await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
         }
 
-        private static IEnumerable<string> GetDataLines()  // разбивает поток на последовательность строк
-        {
 
-            using (var data_stream = GetDataStream().Result)
+        private static IEnumerable<string> GetDataLines()
+        {
+            using (var data_stream = (SynchronizationContext.Current is null ? GetDataStream() : Task.Run(GetDataStream)).Result)
             {
                 using (var data_reader = new StreamReader(data_stream))
                 {
@@ -35,11 +36,18 @@ namespace WpfApp4.Services
                         var line = data_reader.ReadLine();
 
                         if (string.IsNullOrWhiteSpace(line)) continue;
-                        yield return line.Replace("Korea,", "Korea -").Replace("Bonaire,", "Bonaire -");
+
+                        yield return line
+                            .Replace("Korea,", "Korea -")
+                            .Replace("Bonaire,", "Bonaire -")
+                            .Replace("Saint Helena, Ascension and Tristan da Cunha", "Saint Helena - Ascension and Tristan da Cunha");
                     }
                 }
             }
         }
+
+       
+
 
 
         private static DateTime[] GetDates() => GetDataLines()
@@ -60,9 +68,9 @@ namespace WpfApp4.Services
             foreach (var row in lines)
             {
                 var province = row[0].Trim();
-                var country_name = row[1].Trim(' ', '"');
-                var latitude = double.Parse(row[2]);
-                var longitude = double.Parse(row[3]);
+                var country_name = row[1].Trim(' ', '"');               
+                var latitude = row[2] is "" ? 0.0 : double.Parse(row[2], CultureInfo.InvariantCulture);
+                var longitude = row[3] is "" ? 0.0 : double.Parse(row[3], CultureInfo.InvariantCulture);
                 var counts = row.Skip(4).Select(int.Parse).ToArray();
 
 
